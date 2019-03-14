@@ -1,0 +1,83 @@
+{% extends './layout.html' %}
+{% block title %} Home {% endblock %}
+{% block nav %} Hello {{ curr_user.name }}! {% endblock %}
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading">Your Wish List:</div>
+        {% if your_wish_list %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Added by</th>
+                        <th scope="col">Date Added</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in your_wish_list %}
+                        <tr>
+                            <td><a href="{{ item.id }}/">{{ item.name }}</a></td>
+                            <td>{{ item.creator }}</td>
+                            <td>{{ item.created_at }}</a></td>
+                            <td>
+                                {% if item.creator.id != request.session.user_id %}
+                                    <form action="{% url 'items:remove_wish' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="user_id" value="{{ request.session.user_id }}">
+                                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                                        <input type="submit" value="Remove from my Wishlist">
+                                    </form>
+                                {% endif %}
+                                {% if item.creator.id == request.session.user_id %}
+                                    <form action="{% url 'items:delete_wish' %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="user_id" value="{{ request.session.user_id }}">
+                                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                                        <input type="submit" value="Delete">
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">Other Users' Wish List:</div>
+        {% if others_wish_list %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Added by</th>
+                        <th scope="col">Date Added</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in others_wish_list %}
+                        <tr>
+                            <td><a href="{{ item.id }}/">{{ item.name }}</a></td>
+                            <td>{{ item.creator }}</td>
+                            <td>{{ item.created_at }}</a></td>
+                            <td>
+                                <form action="{% url 'items:add_wish' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="user_id" value="{{ request.session.user_id }}">
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                                    <input type="submit" value="Add to my Wishlist">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    <a class="btn btn-dark" href="{% url 'users:add_item' %}">Add Item</a>
+
+{% endblock %}

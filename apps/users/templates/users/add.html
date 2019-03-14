@@ -1,0 +1,23 @@
+{% extends './layout.html' %}
+
+{% block body %}
+    <div class="container">
+        <h3>Create a new wish list item:</h3>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <form action="{% url 'items:create' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="creator" value="{{ request.session.user_id }}">
+            <input type="hidden" name="user_wished" value="{{ request.session.user_id }}">
+            <label for="name">Item/Product:</label>
+            <input type="text" class="form-control col-6" name="name">
+            <br>
+            <input type="submit" value="Add">
+        </form>
+    </div>
+{% endblock %}
