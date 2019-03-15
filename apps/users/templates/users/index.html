@@ -1,17 +1,27 @@
 {% extends './layout.html' %}
+
 {% block title %} Home {% endblock %}
-{% block nav %} Hello {{ curr_user.name }}! {% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block nav %}
+    <h3> Hello {{ curr_user.name }}!</h3>
+{% endblock %}
+
 {% block body %}
-    <div class="panel panel-default">
-        <div class="panel-heading">Your Wish List:</div>
+<div id="main_content">
+    <div class="wished">
+        <h3>My Wish List:</h3>
         {% if your_wish_list %}
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">Item</th>
                         <th scope="col">Added by</th>
                         <th scope="col">Date Added</th>
-                        <th scope="col">Action</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -19,14 +29,14 @@
                         <tr>
                             <td><a href="{{ item.id }}/">{{ item.name }}</a></td>
                             <td>{{ item.creator }}</td>
-                            <td>{{ item.created_at }}</a></td>
+                            <td>{{ item.created_at|date:"M d, Y" }}</a></td>
                             <td>
                                 {% if item.creator.id != request.session.user_id %}
                                     <form action="{% url 'items:remove_wish' %}" method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="user_id" value="{{ request.session.user_id }}">
                                         <input type="hidden" name="item_id" value="{{ item.id }}">
-                                        <input type="submit" value="Remove from my Wishlist">
+                                        <input class="btn btn_table remove" type="submit" value="Remove">
                                     </form>
                                 {% endif %}
                                 {% if item.creator.id == request.session.user_id %}
@@ -34,42 +44,9 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="user_id" value="{{ request.session.user_id }}">
                                         <input type="hidden" name="item_id" value="{{ item.id }}">
-                                        <input type="submit" value="Delete">
+                                        <input class="btn btn_table delete" type="submit" value="Delete">
                                     </form>
                                 {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-    </div>
-    
-    <div class="panel panel-default">
-        <div class="panel-heading">Other Users' Wish List:</div>
-        {% if others_wish_list %}
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Added by</th>
-                        <th scope="col">Date Added</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in others_wish_list %}
-                        <tr>
-                            <td><a href="{{ item.id }}/">{{ item.name }}</a></td>
-                            <td>{{ item.creator }}</td>
-                            <td>{{ item.created_at }}</a></td>
-                            <td>
-                                <form action="{% url 'items:add_wish' %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="user_id" value="{{ request.session.user_id }}">
-                                    <input type="hidden" name="item_id" value="{{ item.id }}">
-                                    <input type="submit" value="Add to my Wishlist">
-                                </form>
                             </td>
                         </tr>
                     {% endfor %}
@@ -78,6 +55,40 @@
         {% endif %}
     </div>
 
-    <a class="btn btn-dark" href="{% url 'users:add_item' %}">Add Item</a>
+    <div class="not_wished">
+        <h3>Items not added:</h3>
+        {% if others_wish_list %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Added by</th>
+                        <th scope="col">Date Added</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in others_wish_list %}
+                        <tr>
+                            <td><a href="{{ item.id }}/">{{ item.name }}</a></td>
+                            <td>{{ item.creator }}</td>
+                            <td>{{ item.created_at|date:"M d, Y" }}</a></td>
+                            <td>
+                                <form action="{% url 'items:add_wish' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="user_id" value="{{ request.session.user_id }}">
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                                    <input class="btn btn_table add" type="submit" value="Add">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+    <a class="btn add_item" href="{% url 'users:add_item' %}">Add New Item</a>
+</div>
+
 
 {% endblock %}

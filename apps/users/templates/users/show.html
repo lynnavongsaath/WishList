@@ -2,13 +2,15 @@
 
 {% block title %} {{ items.name }} {% endblock %}
 
-{% block nav %}{{ items.name }}{% endblock %}
+{% block nav %} <h3>{{ items.name }}</h3> {% endblock %}
+
 {% block body %}
-    <br>
-    <h4>Users who added this product/item under their wish list:</h4>
-    <ul>
-        {% for user in users_wish %}
-            <li>{{ user.name }}</li>
-        {% endfor %}
-    </ul>
+    <div id="main_content">
+        <h4>People who also want the {{ items.name }}!</h4>
+        <ul>
+            {% for user in users_wish %}
+                <li>{{ user.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

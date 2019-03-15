@@ -5,7 +5,7 @@ class ItemManager(models.Manager):
     def validate(self,form):
         errors = []
         if len(form['name']) < 3:
-            errors.append("Item name must be at least 3 charaters long.")
+            errors.append("Item name must be at least 3 characters long.")
         try: 
             self.get(name=form['name'])
             errors.append('Item already added.')
@@ -44,8 +44,8 @@ class ItemManager(models.Manager):
 
 class Item(models.Model):
     name = models.CharField(max_length=255)
-    creator = models.ForeignKey(User, related_name="items") #  was 'user_added', and for related name was 'creator'
-    user_wished = models.ManyToManyField(User, related_name="wished_item") #  was 'user_wish', and for related name was 'wished' 
+    creator = models.ForeignKey(User, related_name="items") 
+    user_wished = models.ManyToManyField(User, related_name="wished_item")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = ItemManager() 

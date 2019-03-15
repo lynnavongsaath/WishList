@@ -5,23 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Rock+Salt|Quicksand|Khula" rel="stylesheet">
     {% load static %}
     <link rel="stylesheet" href="{% static 'users/css/style.css' %}">
     <title>{% block title %} {% endblock %}</title>
     {% block head %} {% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark">
-        {% if 'user_id' in request.session %}
-            <a href="{% url 'users:index' %}" class="btn btn-primary">Users Home</a>
-            <h1 style="color:white;">{% block nav %}{% endblock %}</h1>
-            <a href="{% url 'users:logout' %}" class="btn btn-dark">Logout</a>
-        {% else %}
-            <h1>Welcome to the Wish List!</h1>
-        {% endif %}
-    </nav>
-    <div class="container">
+    <div id="container">
+        <div class="navbar">
+            {% if 'user_id' in request.session %}
+                <a href="{% url 'users:index' %}" class="btn">Home</a>
+                {% block nav %}<h5> Wish for anything you want! </h5>{% endblock %}
+                <a href="{% url 'users:logout' %}" class="btn">Logout</a>
+            {% else %}
+                <div></div>
+                <h5>Wish for anything you want!</h5>
+                <div></div>
+            {% endif %}
+        </div>
         {% block body %} {% endblock %}
     </div>
+
 </body>
 </html>

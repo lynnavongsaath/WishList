@@ -1,54 +1,56 @@
-{% extends './layout.html' %}
+ {% extends './layout.html' %}
 
 {% block title %} Wish List {% endblock %}
 
-{% block body %}
-    <div class="container_form">
-        <h2>Register:</h2>
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+{% block head %} 
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script" rel="stylesheet">
+{% endblock %}
 
-        <form action="{% url 'users:create' %}" method="post">
-        {% csrf_token %}
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" name="name">
-            <br>
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" name="username">
-            <br>
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" name="password">
-            <br>
-            <label for="conf_pw">Confirm Password:</label>
-            <input type="password" class="form-control" name="conf_pw">
-         
-            <br>
-            <input type="submit" value="Register">
-        </form>
+{% block body %}
+    <div id="title_page">
+        <h1>Wish List</h1>
     </div>
-    <div class="container_form">
-        <h2>Login:</h2>
+    <div id="main-content">
+        <div class="error">
             {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
             {% endif %}
-        <form action="{% url 'users:login' %}" method="post">
-        {% csrf_token %}
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" name="username">
-            <br>
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" name="password">
-            <br>
-            <input type="submit" value="Login">
-        </form>
+        </div>
+        <div class="register">
+            <h2>Register:</h2>
+            <form action="{% url 'users:create' %}" method="post">
+            {% csrf_token %}
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" name="name">
+                <br>
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" name="username">
+                <br>
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" name="password">
+                <br>
+                <label for="conf_pw">Confirm Password:</label>
+                <input type="password" class="form-control" name="conf_pw">
+                <br>
+                <input class="btn btn-outline-dark" type="submit" value="Register">
+            </form>
+        </div>
+        <div class="login">
+            <h2>Login:</h2>
+            <form action="{% url 'users:login' %}" method="post">
+            {% csrf_token %}
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" name="username">
+                <br>
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" name="password">
+                <br>
+                <input class="btn btn-outline-dark" type="submit" value="Login">
+            </form>
+        </div>
     </div>
 {% endblock %}
